@@ -1,0 +1,29 @@
+---
+# tasks file for vagrant
+- name: Install virtualbox
+  apt:
+    name: virtualbox
+    update_cache: yes
+    state: latest
+
+- name: Install vagrant
+  apt:
+    name: vagrant
+    state: latest
+
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ dest_vagrant_file }}"
+    state: directory
+    mode: '0755'
+
+- name: Copy file
+  ansible.builtin.template:
+    src: Vagrantfile
+    dest: "{{ dest_vagrant_file }}"
+    mode: "0755"
+
+- name: Run vagrant
+  ansible.builtin.shell: 
+    cmd: vagrant up
+    chdir: "{{ dest_vagrant_file }}"
