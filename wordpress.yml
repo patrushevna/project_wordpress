@@ -5,6 +5,15 @@
   roles:
     - vagrant
 
+- hosts: database
+  become: yes
+
+  vars_files:
+    - group_vars/all_vault.yml
+
+  roles:
+    - { role: mysql, tags: [mysql] }
+
 #- hosts: app
 #  become: yes
 #

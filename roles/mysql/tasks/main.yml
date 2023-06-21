@@ -1,0 +1,61 @@
+---
+# tasks file for mysql
+- name: Install MySQL server
+  apt:
+    name: 
+      - mysql-server
+      - mysql-client
+      - python3-pymysql
+    state: present
+
+      #- name: Copy the root credentials as .my.cnf file
+      # template:
+      #src: root.cnf.j2
+      #dest: /root/.my.cnf
+      #mode: 0600
+
+- name: Set password for root user
+  mysql_user:
+    name: root
+    password: "{{ mysql_root_password }}"
+    priv: '*.*:ALL,GRANT'
+    host: localhost
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    state: present
+
+- name: Copy the root credentials as .my.cnf file
+  template: 
+    src: root.cnf.j2
+    dest: /root/.my.cnf
+    mode: 0600
+
+- name: Create a new database
+  mysql_db:
+    name: "{{ wordpress_database_name }}"
+    collation: utf8_general_ci
+    encoding: utf8
+    state: present
+
+- name: Create database user
+  mysql_user:
+    login_unix_socket: "/var/run/mysqld/mysqld.sock"
+    name: "{{ wordpress_database_user }}"
+    host: '%'
+    password: "{{ wordpress_database_password }}"
+    priv: "{{ wordpress_database_name }}.*:ALL,GRANT"
+    state: present
+
+- name: Remove test DB
+  mysql_db:
+    name: test
+    state: absent
+
+- name: Remove anonymous user
+  mysql_user:
+    name: ''
+    state: absent
+
+- name: Remove   /root/.my.cnf
+  ansible.builtin.file:
+    path: /root/.my.cnf
+    state: absent

@@ -1,7 +1,7 @@
 ---
 # defaults file for vagrant
 dest_vagrant_file: /tmp/vagrant
-ssh_key: /home/vagrant/.ssh/id_rsa.pub
+ssh_key: /home/nikita/.ssh/id_rsa.pub
 os_env: ubuntu/20.04
 ip_proxy: 192.168.60.11
 ip_app1: 192.168.60.12
