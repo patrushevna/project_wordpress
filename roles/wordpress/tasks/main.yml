@@ -1,0 +1,31 @@
+---
+# tasks file for wordpress
+- name: Install WordPress core files
+  get_url:
+    url: "https://wordpress.org/latest.tar.gz"
+    dest: "/tmp/{{ wordpress_database_name }}.tar.gz"
+    mode: '0755'
+      #register: wordpress_download_result
+  
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: "/var/www/{{ domain_name }}"
+    state: directory
+    mode: '0755'
+
+- name: Extract WordPress core files
+  unarchive:
+    src: "/tmp/{{ wordpress_database_name }}.tar.gz"
+    dest: "/var/www/{{ domain_name }}"
+    remote_src: yes
+    owner: www-data
+    group: www-data
+    mode: '0755'
+  
+- name: Create WordPress configuration file
+  template:
+    src: wp-config.php.j2
+    dest: "/var/www/{{ domain_name }}/{{ wordpress_database_name }}/wp-config.php"
+    owner: www-data
+    group: www-data
+    mode: '0640'

@@ -14,16 +14,13 @@
   roles:
     - { role: mysql, tags: [mysql] }
 
-#- hosts: app
-#  become: yes
-#
-#  vars_files:
-#    - group_vars/all_vault.yml
-#
-#
-#  roles:
-#    - { role: predeploy, tags: [predeploy]}
-#    - { role: nginx, tags: [nginx]}
-#    - { role: mysql, tags: [mysql]}
-#    - { role: wordpress, tags: [wordpress]}
+- hosts: wordpress
+  become: yes
 
+  vars_files:
+    - group_vars/all_vault.yml
+
+  roles:
+    - { role: predeploy, tags: [predeploy] }
+    - { role: nginx, tags: [nginx] }
+    - { role: wordpress, tags: [wordpress] }

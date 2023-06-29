@@ -1,0 +1,49 @@
+---
+# tasks file for nginx
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: latest
+
+- name: Instal PHP-FPM
+  apt:
+    name: 
+      - php{{ php_version }}-fpm
+      - php{{ php_version }}-mysql
+      - php{{ php_version }}-curl
+      - php{{ php_version }}-gd
+      - php{{ php_version }}-mbstring
+      - php{{ php_version }}-xml
+      - php{{ php_version }}-xmlrpc
+      - php{{ php_version }}-soap
+      - php{{ php_version }}-intl
+      - php{{ php_version }}-zip
+    state: present
+
+- name: Configure php.ini
+  blockinfile:
+    dest: /etc/php/{{ php_version }}/fpm/php.ini
+    block: |
+      date.time = Europe/Moscow
+      cgi-fix_pathinfo = 0
+    backup: yes
+  notify: restart php-fpm
+
+- name: Configure Nginx virtual host for WordPress
+  template:
+    src: site.conf.j2
+    dest: /etc/nginx/sites-available/{{ wordpress_database_name }}
+    mode: 0644
+  register: nginx_vhost_template_result
+
+- name: Create symbolic link for WordPress in Nginx
+  file:
+    src: /etc/nginx/sites-available/{{ wordpress_database_name }}
+    dest: /etc/nginx/sites-enabled/{{ wordpress_database_name }}
+    state: link
+  
+- name: Remove Nginx default virtual host
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: restart nginx

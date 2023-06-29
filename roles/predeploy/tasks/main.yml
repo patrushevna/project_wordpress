@@ -1,0 +1,9 @@
+---
+# tasks file for predeploy
+- name: Add php repos
+  ansible.builtin.apt_repository:
+    repo: ppa:ondrej/php
+
+- name: Update apt packages cache
+  apt:
+    update_cache: yes

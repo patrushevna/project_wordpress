@@ -2,3 +2,4 @@ wordpress_database_name: "wordpress"
 wordpress_database_user: "wordpress"
 wordpress_admin_username: "admin"
 domain_name: test.io
+database_server: 192.168.60.14
