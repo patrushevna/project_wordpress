@@ -24,3 +24,13 @@
     - { role: predeploy, tags: [predeploy] }
     - { role: nginx, tags: [nginx] }
     - { role: wordpress, tags: [wordpress] }
+
+- hosts: balancer
+  become: yes
+
+  vars_files:
+    - group_vars/all_vault.yml
+
+  roles:
+    - { role: balancer, tags: [balancer] }
+    

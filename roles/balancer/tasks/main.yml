@@ -1,0 +1,28 @@
+---
+# tasks file for balancer
+- name: Install nginx
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Configure NGINX 
+  copy:
+    src=nginx.conf
+    dest=/etc/nginx/nginx.conf
+
+- name: Configure site
+  template:
+    src=wordpress_http.conf.j2
+    dest=/etc/nginx/conf.d/wordpress_http.conf
+
+- name: delete default page
+  file:      
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Restart NGINX
+  service:
+    name: nginx
+    state: restarted
+

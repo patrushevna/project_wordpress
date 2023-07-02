@@ -3,3 +3,8 @@ wordpress_database_user: "wordpress"
 wordpress_admin_username: "admin"
 domain_name: test.io
 database_server: 192.168.60.14
+wordpress:
+  - name: app1
+    ip: 192.168.60.12
+  - name: app22
+    ip: 192.168.60.13
